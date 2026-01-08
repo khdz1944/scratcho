@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power in Unity: Voices Together, Better Forever</title>
+<style>
+  body { margin: 0; font-family: Arial, sans-serif; overflow-x: hidden; }
+  header { background: #4CAF50; color: white; text-align: center; padding: 1rem; }
+  nav { position: fixed; top: 0; right: 0; width: 200px; height: 100%; background: white; border-left: 1px solid #ccc; overflow-y: auto; padding: 1rem; }
+  nav a { display: block; margin: 0.5rem 0; text-decoration: none; color: #4CAF50; }
+  main { margin-right: 220px; padding: 1rem; }
+  section { padding: 1rem; border-bottom: 1px solid #ccc; margin-bottom: 2rem; }
+  h2 { color: #4CAF50; }
+  .stage-number { font-weight: bold; }
+  #stage { position: relative; width: 100%; height: 200px; margin-top: 1rem; background: #ddd; overflow: hidden; }
+  .sprite { width: 80px; height: 80px; position: absolute; transition: all 1s linear; }
+  .speech { position: absolute; background: rgba(255,255,255,0.9); padding: 5px 10px; border-radius: 10px; border: 1px solid #4CAF50; display: none; white-space: nowrap; font-size: 0.9rem; }
+  button { background: #4CAF50; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; margin-top: 0.5rem; }
+  button:hover { background: #45a049; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Power in Unity: Voices Together, Better Forever</h1>
+  <p>Automatic Scratch-like Story</p>
+</header>
+
+<nav>
+  <a href="#stage1">01. Welcome & Mission</a>
+  <a href="#stage2">02. Automatic Story</a>
+  <a href="#stage3">03. Ready for Scratch</a>
+</nav>
+
+<main>
+  <section id="stage1">
+    <h2><span class="stage-number">01</span> Welcome & Mission</h2>
+    <p>Introduce students to global citizenship and project goals.</p>
+  </section>
+
+  <section id="stage2">
+    <h2><span class="stage-number">02</span> Automatic Story</h2>
+    <button onclick="startStory()">Start Story</button>
+    <div id="stage">
+      <div class="sprite" id="sprite1" style="top: 50px; left: 0;"><img src="https://via.placeholder.com/80?text=Sprite+1" alt="Sprite 1"></div>
+      <div class="speech" id="speech1"></div>
+      <div class="sprite" id="sprite2" style="top: 120px; left: 0;"><img src="https://via.placeholder.com/80?text=Sprite+2" alt="Sprite 2"></div>
+      <div class="speech" id="speech2"></div>
+    </div>
+  </section>
+
+  <section id="stage3">
+    <h2><span class="stage-number">03</span> Ready for Scratch</h2>
+    <p>You can now recreate this story fully in Scratch!</p>
+  </section>
+</main>
+
+<script>
+const scenes = [
+  {bg: '#87CEEB', messages: [["Hello! Let's help!", "We can make a change!"], ["Yes! Small actions matter.", "Together stronger!"]]},
+  {bg: '#FFD700', messages: [["Look at us!", "Kindness spreads!"], ["Keep going!", "Yes!"]]},
+  {bg: '#90EE90', messages: [["Mission complete!", "We did it!"], ["Amazing teamwork!", "Voices together!"]]}
+];
+
+const sprite1 = document.getElementById('sprite1');
+const sprite2 = document.getElementById('sprite2');
+const speech1 = document.getElementById('speech1');
+const speech2 = document.getElementById('speech2');
+const stage = document.getElementById('stage');
+
+let currentScene = 0;
+
+function startStory() {
+  runScene(0);
+}
+
+function runScene(index) {
+  if (index >= scenes.length) return;
+  const scene = scenes[index];
+  stage.style.background = scene.bg;
+  
+  let step = 0;
+  const interval = setInterval(() => {
+    if (step >= scene.messages[0].length) {
+      clearInterval(interval);
+      runScene(index + 1);
+      return;
+    }
+    
+    // Move sprites
+    const pos = 50 + step*120;
+    sprite1.style.left = pos + 'px';
+    sprite2.style.left = pos + 'px';
+    
+    // Show messages
+    speech1.style.left = (pos + 80) + 'px';
+    speech1.style.top = sprite1.offsetTop - 30 + 'px';
+    speech1.textContent = scene.messages[0][step];
+    speech1.style.display = 'block';
+    
+    speech2.style.left = (pos + 80) + 'px';
+    speech2.style.top = sprite2.offsetTop - 30 + 'px';
+    speech2.textContent = scene.messages[1][step];
+    speech2.style.display = 'block';
+    
+    step++;
+  }, 2000);
+}
+</script>
+
+</body>
+</html>
