@@ -1,113 +1,1297 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Power in Unity: Voices Together, Better Forever</title>
-<style>
-  body { margin: 0; font-family: Arial, sans-serif; overflow-x: hidden; }
-  header { background: #4CAF50; color: white; text-align: center; padding: 1rem; }
-  nav { position: fixed; top: 0; right: 0; width: 200px; height: 100%; background: white; border-left: 1px solid #ccc; overflow-y: auto; padding: 1rem; }
-  nav a { display: block; margin: 0.5rem 0; text-decoration: none; color: #4CAF50; }
-  main { margin-right: 220px; padding: 1rem; }
-  section { padding: 1rem; border-bottom: 1px solid #ccc; margin-bottom: 2rem; }
-  h2 { color: #4CAF50; }
-  .stage-number { font-weight: bold; }
-  #stage { position: relative; width: 100%; height: 200px; margin-top: 1rem; background: #ddd; overflow: hidden; }
-  .sprite { width: 80px; height: 80px; position: absolute; transition: all 1s linear; }
-  .speech { position: absolute; background: rgba(255,255,255,0.9); padding: 5px 10px; border-radius: 10px; border: 1px solid #4CAF50; display: none; white-space: nowrap; font-size: 0.9rem; }
-  button { background: #4CAF50; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; margin-top: 0.5rem; }
-  button:hover { background: #45a049; }
-</style>
-</head>
-<body>
-
-<header>
-  <h1>Power in Unity: Voices Together, Better Forever</h1>
-  <p>Automatic Scratch-like Story</p>
-</header>
-
-<nav>
-  <a href="#stage1">01. Welcome & Mission</a>
-  <a href="#stage2">02. Automatic Story</a>
-  <a href="#stage3">03. Ready for Scratch</a>
-</nav>
-
-<main>
-  <section id="stage1">
-    <h2><span class="stage-number">01</span> Welcome & Mission</h2>
-    <p>Introduce students to global citizenship and project goals.</p>
-  </section>
-
-  <section id="stage2">
-    <h2><span class="stage-number">02</span> Automatic Story</h2>
-    <button onclick="startStory()">Start Story</button>
-    <div id="stage">
-      <div class="sprite" id="sprite1" style="top: 50px; left: 0;"><img src="https://via.placeholder.com/80?text=Sprite+1" alt="Sprite 1"></div>
-      <div class="speech" id="speech1"></div>
-      <div class="sprite" id="sprite2" style="top: 120px; left: 0;"><img src="https://via.placeholder.com/80?text=Sprite+2" alt="Sprite 2"></div>
-      <div class="speech" id="speech2"></div>
-    </div>
-  </section>
-
-  <section id="stage3">
-    <h2><span class="stage-number">03</span> Ready for Scratch</h2>
-    <p>You can now recreate this story fully in Scratch!</p>
-  </section>
-</main>
-
-<script>
-const scenes = [
-  {bg: '#87CEEB', messages: [["Hello! Let's help!", "We can make a change!"], ["Yes! Small actions matter.", "Together stronger!"]]},
-  {bg: '#FFD700', messages: [["Look at us!", "Kindness spreads!"], ["Keep going!", "Yes!"]]},
-  {bg: '#90EE90', messages: [["Mission complete!", "We did it!"], ["Amazing teamwork!", "Voices together!"]]}
-];
-
-const sprite1 = document.getElementById('sprite1');
-const sprite2 = document.getElementById('sprite2');
-const speech1 = document.getElementById('speech1');
-const speech2 = document.getElementById('speech2');
-const stage = document.getElementById('stage');
-
-let currentScene = 0;
-
-function startStory() {
-  runScene(0);
-}
-
-function runScene(index) {
-  if (index >= scenes.length) return;
-  const scene = scenes[index];
-  stage.style.background = scene.bg;
-  
-  let step = 0;
-  const interval = setInterval(() => {
-    if (step >= scene.messages[0].length) {
-      clearInterval(interval);
-      runScene(index + 1);
-      return;
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scratch Global Citizenship Teacher</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
     }
     
-    // Move sprites
-    const pos = 50 + step*120;
-    sprite1.style.left = pos + 'px';
-    sprite2.style.left = pos + 'px';
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
     
-    // Show messages
-    speech1.style.left = (pos + 80) + 'px';
-    speech1.style.top = sprite1.offsetTop - 30 + 'px';
-    speech1.textContent = scene.messages[0][step];
-    speech1.style.display = 'block';
+    * {
+      font-family: 'Quicksand', 'Trebuchet MS', sans-serif;
+      box-sizing: border-box;
+    }
     
-    speech2.style.left = (pos + 80) + 'px';
-    speech2.style.top = sprite2.offsetTop - 30 + 'px';
-    speech2.textContent = scene.messages[1][step];
-    speech2.style.display = 'block';
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
     
-    step++;
-  }, 2000);
-}
-</script>
+    #main-wrapper {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    
+    .stage-card {
+      border-radius: 24px;
+      padding: 28px;
+      margin-bottom: 24px;
+      border: 5px solid;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .stage-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 100%);
+      pointer-events: none;
+    }
+    
+    .stage-card.locked {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .stage-card.unlocked {
+      cursor: pointer;
+    }
+    
+    .stage-card.unlocked:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    
+    .stage-card.completed {
+      border-width: 6px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    
+    .action-btn {
+      padding: 18px 36px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 18px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .action-btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.5s, height 0.5s;
+    }
+    
+    .action-btn:hover:not(:disabled)::after {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .action-btn:hover:not(:disabled) {
+      transform: scale(1.08);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.3);
+    }
+    
+    .action-btn:active:not(:disabled) {
+      transform: scale(0.96);
+    }
+    
+    .action-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .progress-container {
+      width: 100%;
+      height: 16px;
+      border-radius: 24px;
+      overflow: hidden;
+      margin: 24px 0;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.15);
+    }
+    
+    .progress-bar {
+      height: 100%;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 24px;
+      background: linear-gradient(90deg, currentColor 0%, currentColor 100%);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    
+    .mission-banner {
+      border-radius: 20px;
+      padding: 24px;
+      margin: 24px 0;
+      border-left: 8px solid;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .practice-zone {
+      border-radius: 20px;
+      padding: 32px;
+      margin: 28px 0;
+      border: 5px solid;
+      background: rgba(255,255,255,0.6);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    }
+    
+    .sprite-option {
+      width: 110px;
+      height: 110px;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 4px solid transparent;
+      margin: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .sprite-option:hover {
+      transform: scale(1.15) rotate(5deg);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+    
+    .sprite-option.selected {
+      border-color: #FFD700;
+      box-shadow: 0 0 24px rgba(255,215,0,0.7);
+      animation: pulse 1s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    .code-brick {
+      padding: 14px 20px;
+      border-radius: 12px;
+      margin: 10px;
+      cursor: grab;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      display: inline-block;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      border: 2px solid rgba(0,0,0,0.1);
+    }
+    
+    .code-brick:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    }
+    
+    .code-brick:active {
+      cursor: grabbing;
+      transform: scale(1.05);
+    }
+    
+    .drop-area {
+      min-height: 80px;
+      border: 4px dashed;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 16px 0;
+      transition: all 0.3s ease;
+      background: rgba(255,255,255,0.5);
+    }
+    
+    .drop-area.drag-over {
+      background: rgba(120, 220, 180, 0.3);
+      border-style: solid;
+      box-shadow: inset 0 0 20px rgba(120, 220, 180, 0.4);
+    }
+    
+    .badge-tag {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 24px;
+      font-weight: 700;
+      font-size: 15px;
+      margin: 6px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+    
+    .lock-symbol {
+      font-size: 56px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+    
+    @keyframes fadeInUp {
+      from { 
+        opacity: 0; 
+        transform: translateY(30px); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0); 
+      }
+    }
+    
+    .fade-in-up {
+      animation: fadeInUp 0.6s ease-out;
+    }
+    
+    @keyframes celebrate {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(1.3) rotate(-15deg); }
+      50% { transform: scale(1.3) rotate(15deg); }
+      75% { transform: scale(1.3) rotate(-15deg); }
+    }
+    
+    .celebrate-anim {
+      display: inline-block;
+      animation: celebrate 1.2s ease-in-out;
+    }
+    
+    .backdrop-choice {
+      width: 140px;
+      height: 105px;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 4px solid transparent;
+      margin: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .backdrop-choice:hover {
+      transform: scale(1.12);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+    
+    .backdrop-choice.selected {
+      border-color: #FFD700;
+      box-shadow: 0 0 24px rgba(255,215,0,0.7);
+    }
+    
+    .text-input {
+      padding: 14px;
+      border-radius: 12px;
+      border: 3px solid;
+      font-size: 17px;
+      width: 100%;
+      max-width: 450px;
+      margin: 10px 0;
+      transition: all 0.3s ease;
+    }
+    
+    .text-input:focus {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(0,0,0,0.1);
+    }
+    
+    .notification-toast {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      padding: 20px 32px;
+      border-radius: 16px;
+      font-weight: 700;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+      z-index: 1000;
+      animation: fadeInUp 0.4s ease-out;
+      font-size: 18px;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full">
+  <div id="main-wrapper"><!-- Header Section -->
+   <div id="header-section" class="py-8 px-6 text-center">
+    <h1 id="main-title" class="text-6xl font-bold mb-4">🌍 Scratch Global Citizenship Stories</h1>
+    <p id="main-subtitle" class="text-2xl mb-3">Learn Scratch while becoming a global citizen!</p>
+    <p id="teacher-label" class="text-xl font-semibold">Your Scratch Teacher</p>
+   </div><!-- Progress Section -->
+   <div class="max-w-6xl mx-auto px-6 mb-8">
+    <div class="progress-container" id="progress-bg">
+     <div class="progress-bar" id="progress-fill" style="width: 0%;"></div>
+    </div>
+    <p id="progress-label" class="text-center font-bold text-xl">0 of 13 Stages Complete</p>
+   </div><!-- Stage Grid View -->
+   <div id="stage-grid-view" class="max-w-7xl mx-auto px-6 pb-16">
+    <h2 class="text-4xl font-bold text-center mb-8">Choose Your Learning Stage</h2>
+    <div id="stages-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+   </div><!-- Individual Stage View -->
+   <div id="individual-stage-view" class="hidden max-w-6xl mx-auto px-6 pb-16">
+    <div class="flex justify-between items-center mb-8 gap-6 flex-wrap"><button class="action-btn" onclick="returnToGrid()">← Back to Stages</button>
+     <div class="flex gap-4 flex-wrap"><button id="prev-btn-top" class="action-btn" onclick="navigatePrevious()" style="display: none;">← Previous</button> <button id="next-btn-top" class="action-btn" onclick="navigateNext()" style="display: none;">Next →</button>
+     </div>
+    </div>
+    <div id="stage-details"></div>
+    <div class="flex justify-between items-center mt-8 gap-6 flex-wrap"><button class="action-btn" onclick="returnToGrid()">← Back to Stages</button>
+     <div class="flex gap-4 flex-wrap"><button id="prev-btn-bottom" class="action-btn" onclick="navigatePrevious()" style="display: none;">← Previous</button> <button id="next-btn-bottom" class="action-btn" onclick="navigateNext()" style="display: none;">Next →</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      bg_color: "#E8F5E9",
+      card_color: "#FFFFFF",
+      text_color: "#1B5E20",
+      action_color: "#FF5722",
+      accent_color: "#00BCD4",
+      font_family: "Quicksand",
+      font_size: 16,
+      site_title: "🌍 Scratch Global Citizenship Stories",
+      welcome_message: "Learn Scratch while becoming a global citizen!",
+      teacher_name: "Your Scratch Teacher"
+    };
 
-</body>
+    let appConfig = { ...defaultConfig };
+    let stagesCompleted = [];
+    let activeStage = 0;
+    let stageState = {};
+
+    const learningStages = [
+      {
+        num: 1,
+        title: "🌟 Welcome & Mission",
+        task: "Learn what digital stories and global citizenship are!",
+        activityType: "quiz",
+        valueMessage: "🌍 Global Value: Beginning your journey to make the world better!"
+      },
+      {
+        num: 2,
+        title: "👥 Choose Characters",
+        task: "Pick TWO different sprites for your story!",
+        activityType: "sprite-select",
+        valueMessage: "🌈 Global Value: DIVERSITY - Everyone is different and special!"
+      },
+      {
+        num: 3,
+        title: "🏞️ Set the Scene",
+        task: "Choose a backdrop for your story!",
+        activityType: "backdrop-select",
+        valueMessage: "🌏 Global Value: ONE PLANET - We all share the same Earth!"
+      },
+      {
+        num: 4,
+        title: "🚩 Start the Story",
+        task: "Add the green flag event block!",
+        activityType: "block-drag",
+        blockKind: "event",
+        valueMessage: "⭐ Global Value: BEGINNING - Every good action starts with one step!"
+      },
+      {
+        num: 5,
+        title: "🏃 Make It Move",
+        task: "Add a motion block to make your sprite move!",
+        activityType: "block-drag",
+        blockKind: "motion",
+        valueMessage: "🤝 Global Value: COOPERATION - Moving together towards friendship!"
+      },
+      {
+        num: 6,
+        title: "💬 Make It Talk",
+        task: "Add a say block with a kind message!",
+        activityType: "dialogue",
+        valueMessage: "💕 Global Value: KINDNESS - Kind words make the world brighter!"
+      },
+      {
+        num: 7,
+        title: "⏰ Add Timing",
+        task: "Use a wait block to organize your story!",
+        activityType: "block-drag",
+        blockKind: "wait",
+        valueMessage: "🎯 Global Value: PATIENCE - Good things take time and planning!"
+      },
+      {
+        num: 8,
+        title: "🙋 Ask a Question",
+        task: "Make your character ask about helping others!",
+        activityType: "interaction",
+        valueMessage: "🌍 Global Value: RESPONSIBILITY - We all have a part to play!"
+      },
+      {
+        num: 9,
+        title: "📣 Share Your Message",
+        task: "Choose a global citizenship value to share!",
+        activityType: "message-select",
+        valueMessage: "📢 Global Value: VOICE - Your message can inspire others!"
+      },
+      {
+        num: 10,
+        title: "✨ End the Story",
+        task: "Add a positive final message!",
+        activityType: "ending",
+        valueMessage: "🌟 Global Value: HOPE - We believe in a better future!"
+      },
+      {
+        num: 11,
+        title: "🤔 Reflection",
+        task: "Think about what you learned!",
+        activityType: "reflection",
+        valueMessage: "🧠 Global Value: LEARNING - Thinking helps us grow!"
+      },
+      {
+        num: 12,
+        title: "🎊 Celebration",
+        task: "Celebrate your achievement!",
+        activityType: "celebration",
+        valueMessage: "🌈 Global Value: INSPIRATION - Your actions inspire others!"
+      },
+      {
+        num: 13,
+        title: "🚀 Ready for Scratch",
+        task: "Time to create your story in the real Scratch!",
+        activityType: "scratch-link",
+        valueMessage: "🌟 Global Value: ACTION - Now it's time to make your ideas real!"
+      }
+    ];
+
+    const dataHandler = {
+      onDataChanged(data) {
+        stagesCompleted = data.map(item => item.stage_number);
+        refreshProgressBar();
+        if (!document.getElementById('stage-grid-view').classList.contains('hidden')) {
+          displayStageGrid();
+        }
+      }
+    };
+
+    async function startApp() {
+      const result = await window.dataSdk.init(dataHandler);
+      if (!result.isOk) {
+        console.error("Data SDK initialization failed");
+      }
+    }
+
+    async function markStageComplete(stageNum) {
+      if (stagesCompleted.length >= 999) {
+        showNotification('Maximum limit of 999 stages reached!', 'error');
+        return;
+      }
+      
+      const alreadyCompleted = stagesCompleted.includes(stageNum);
+      if (!alreadyCompleted) {
+        const result = await window.dataSdk.create({
+          stage_number: stageNum,
+          completed: true,
+          timestamp: new Date().toISOString()
+        });
+        
+        if (result.isOk) {
+          showNotification(`🎉 Stage ${stageNum} Complete!`, 'success');
+        } else {
+          showNotification('Error saving progress', 'error');
+        }
+      }
+    }
+
+    function isUnlocked(stageNum) {
+      return true;
+    }
+
+    function refreshProgressBar() {
+      const percent = (stagesCompleted.length / 13) * 100;
+      document.getElementById('progress-fill').style.width = `${percent}%`;
+      document.getElementById('progress-label').textContent = `${stagesCompleted.length} of 13 Stages Complete`;
+    }
+
+    function displayStageGrid() {
+      const container = document.getElementById('stages-container');
+      const baseSize = appConfig.font_size || defaultConfig.font_size;
+      const fontStack = `${appConfig.font_family || defaultConfig.font_family}, Trebuchet MS, sans-serif`;
+      const actionColor = appConfig.action_color || defaultConfig.action_color;
+      const cardColor = appConfig.card_color || defaultConfig.card_color;
+      const textColor = appConfig.text_color || defaultConfig.text_color;
+      
+      container.innerHTML = learningStages.map(stage => {
+        const unlocked = isUnlocked(stage.num);
+        const completed = stagesCompleted.includes(stage.num);
+        const unlockedClass = unlocked ? 'unlocked' : 'locked';
+        const completedClass = completed ? 'completed' : '';
+        const checkMark = completed ? '<div style="position: absolute; top: 12px; right: 12px; font-size: 36px; z-index: 5;">✅</div>' : '';
+        const lockMark = unlocked ? '' : '<div class="lock-symbol">🔒</div>';
+        
+        return `
+          <div class="stage-card ${unlockedClass} ${completedClass}" 
+               style="background: ${cardColor}; border-color: ${completed ? actionColor : '#ccc'}; color: ${textColor}; font-family: ${fontStack};"
+               onclick="${unlocked ? `loadStage(${stage.num})` : ''}">
+            ${checkMark}
+            ${lockMark}
+            <div class="badge-tag" style="background: ${actionColor}; color: ${cardColor}; font-size: ${baseSize * 0.9375}px;">
+              STAGE ${stage.num}
+            </div>
+            <h3 style="font-size: ${baseSize * 1.625}px; font-weight: 700; margin: 20px 0;">
+              ${stage.title}
+            </h3>
+            <p style="font-size: ${baseSize * 1.0625}px; line-height: 1.6;">
+              ${stage.task}
+            </p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function loadStage(stageNum) {
+      activeStage = stageNum;
+      stageState = {};
+      document.getElementById('stage-grid-view').classList.add('hidden');
+      document.getElementById('individual-stage-view').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      displayStageContent(stageNum);
+      updateNavButtons();
+    }
+
+    function returnToGrid() {
+      activeStage = 0;
+      stageState = {};
+      document.getElementById('individual-stage-view').classList.add('hidden');
+      document.getElementById('stage-grid-view').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function navigatePrevious() {
+      if (activeStage > 1) {
+        loadStage(activeStage - 1);
+      }
+    }
+
+    function navigateNext() {
+      if (activeStage < 13) {
+        loadStage(activeStage + 1);
+      }
+    }
+
+    function updateNavButtons() {
+      const actionColor = appConfig.action_color || defaultConfig.action_color;
+      const cardColor = appConfig.card_color || defaultConfig.card_color;
+      
+      const prevButtons = [document.getElementById('prev-btn-top'), document.getElementById('prev-btn-bottom')];
+      const nextButtons = [document.getElementById('next-btn-top'), document.getElementById('next-btn-bottom')];
+      
+      prevButtons.forEach(btn => {
+        if (activeStage > 1) {
+          btn.style.display = 'block';
+          btn.style.background = actionColor;
+          btn.style.color = cardColor;
+        } else {
+          btn.style.display = 'none';
+        }
+      });
+      
+      nextButtons.forEach(btn => {
+        if (activeStage < 13) {
+          btn.style.display = 'block';
+          btn.style.background = actionColor;
+          btn.style.color = cardColor;
+        } else {
+          btn.style.display = 'none';
+        }
+      });
+    }
+
+    function displayStageContent(stageNum) {
+      const stage = learningStages[stageNum - 1];
+      const container = document.getElementById('stage-details');
+      const baseSize = appConfig.font_size || defaultConfig.font_size;
+      const fontStack = `${appConfig.font_family || defaultConfig.font_family}, Trebuchet MS, sans-serif`;
+      const actionColor = appConfig.action_color || defaultConfig.action_color;
+      const accentColor = appConfig.accent_color || defaultConfig.accent_color;
+      const cardColor = appConfig.card_color || defaultConfig.card_color;
+      const textColor = appConfig.text_color || defaultConfig.text_color;
+      
+      let activityHTML = '';
+      
+      if (stage.activityType === 'quiz') {
+        activityHTML = `
+          <div class="practice-zone" style="border-color: ${actionColor};">
+            <h3 style="font-size: ${baseSize * 1.625}px; font-weight: 700; margin-bottom: 24px;">🎓 Quick Quiz:</h3>
+            <p style="font-size: ${baseSize * 1.1875}px; margin-bottom: 20px;">What does being a global citizen mean?</p>
+            <div style="margin: 16px 0;">
+              <button class="code-brick" style="background: ${cardColor}; color: ${textColor}; border: 3px solid ${actionColor}; width: 100%; text-align: left;" onclick="validateQuiz(1, false)">
+                Only helping people in your own country
+              </button>
+            </div>
+            <div style="margin: 16px 0;">
+              <button class="code-brick" style="background: ${cardColor}; color: ${textColor}; border: 3px solid ${actionColor}; width: 100%; text-align: left;" onclick="validateQuiz(1, true)">
+                Helping others, respecting differences, and protecting our planet
+              </button>
+            </div>
+            <div style="margin: 16px 0;">
+              <button class="code-brick" style="background: ${cardColor}; color: ${textColor}; border: 3px solid ${actionColor}; width: 100%; text-align: left;" onclick="validateQuiz(1, false)">
+                Only learning about computers
+              </button>
+            </div>
+          </div>
+        `;
+      } else if (stage.activityType === 'sprite-select') {
+        activityHTML = `
+          <div class="practice-zone" style="border-color: ${actionColor};">
+            <h3 style="font-size: ${baseSize * 1.625}px; font-weight: 700; margin-bottom: 24px;">🎯 Practice: Choose 2 Different Sprites</h3>
+            <p style="font-size: ${baseSize * 1.1875}px; margin-bottom: 20px;">Click on TWO sprites that look different!</p>
+            <div style="text-align: center; margin: 24px 0;">
+              <div class="sprite-option" style="background: ${cardColor};" onclick="pickSprite(this, '🐱', 'cat')">🐱</div>
+              <div class="sprite-option" style="background: ${cardColor};" onclick="pickSprite(this, '🦁', 'lion')">🦁</div>
+              <div class="sprite-option" style="background: ${cardColor};" onclick="pickSprite(this, '🐼', 'panda')">🐼</div>
+              <div class="sprite-option" style="background: ${cardColor};" onclick="pickSprite(this, '👧', 'girl')">👧</div>
+              <div class="sprite-option" style="background: ${cardColor};" onclick="pickSprite(this, '👦', 'boy')">👦</div>
+              <div class="sprite-option" style="background: ${cardColor};" onclick="pickSprite(this, '🌍', 'earth')">🌍</div>
+            </div>
+            <button id="confirm-sprites" class="action-btn" style="background: ${actionColor}; color: ${cardColor}; opacity: 0.5;" onclick="validateSprites()" disabled>
+              Check My Choices
+            </button>
+          </div>
+        `;
+      } else if (stage.activityType === 'backdrop-select') {
+        activityHTML = `
+          <div class="practice-zone" style="border-color: ${actionColor};">
+            <h3 style="font-size: ${baseSize * 1.625}px; font-weight: 700; margin-bottom: 24px;">🎯 Practice: Choose a Backdrop</h3>
+            <p style="font-size: ${baseSize * 1.1875}px; margin-bottom: 20px;">Click on a backdrop for your story!</p>
+            <div style="text-align: center; margin: 24px 0;">
+              <div class="backdrop-choice" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="pickBackdrop(this, 'space')">🌌</div>
+              <div class="backdrop-choice" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);" onclick="pickBackdrop(this, 'school')">🏫</div>
+              <div class="backdrop-choice" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);" onclick="pickBackdrop(this, 'park')">🌳</div>
+              <div class="backdrop-choice" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);" onclick="pickBackdrop(this, 'city')">🏙️</div>
+              <div class="backdrop-choice" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);" onclick="pickBackdrop(this, 'beach')">🏖️</div>
+            </div>
+            <button id="confirm-backdrop" class="action-btn" style="background: ${actionColor}; color: ${cardColor}; opacity: 0.5;" onclick="validateBackdrop()" disabled>
+              Confirm Backdrop
+            </button>
+          </div>
+        `;
+      } else if (stage.activityType === 'block-drag') {
+        let blocksHTML = '';
+        let dropText = '';
+        
+        if (stage.blockKind === 'event') {
+          blocksHTML = `<div class="code-brick" style="background: #FFAB19; color: white;" draggable="true" ondragstart="startDrag(event)" data-block="event">when 🚩 clicked</div>`;
+          dropText = 'Drag the green flag block here';
+        } else if (stage.blockKind === 'motion') {
+          blocksHTML = `
+            <div class="code-brick" style="background: #FFAB19; color: white;" draggable="true" ondragstart="startDrag(event)" data-block="event">when 🚩 clicked</div>
+            <div class="code-brick" style="background: #4C97FF; color: white;" draggable="true" ondragstart="startDrag(event)" data-block="motion">move 10 steps</div>
+            <div class="code-brick" style="background: #9966FF; color: white;" draggable="true" ondragstart="startDrag(event)" data-block="looks">say Hello!</div>
+          `;
+          dropText = 'Drag blocks: event block, then motion block';
+        } else if (stage.blockKind === 'wait') {
+          blocksHTML = `
+            <div class="code-brick" style="background: #FFAB19; color: white;" draggable="true" ondragstart="startDrag(event)" data-block="event">when 🚩 clicked</div>
+            <div class="code-brick" style="background: #FFBF00; color: white;" draggable="true" ondragstart="startDrag(event)" data-block="wait">wait 2 seconds</div>
+            <div class="code-brick" style="background: #9966FF; color: white;" draggable="true" ondragstart="startDrag(event)" data-block="looks">say Hello!</div>
+          `;
+          dropText = 'Drag blocks: event, say, wait, say';
+        }
+        
+        activityHTML = `
+          <div class="practice-zone" style="border-color: ${actionColor};">
+            <h3 style="font-size: ${baseSize * 1.625}px; font-weight: 700; margin-bottom: 24px;">🎯 Practice: Build Your Code</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px;">
+              <div>
+                <p style="font-size: ${baseSize * 1.1875}px; font-weight: 700; margin-bottom: 16px;">Available Blocks:</p>
+                <div id="blocks-palette">
+                  ${blocksHTML}
+                </div>
+              </div>
+              <div>
+                <p style="font-size: ${baseSize * 1.1875}px; font-weight: 700; margin-bottom: 16px;">Your Code Area:</p>
+                <div class="drop-area" id="code-drop-zone" style="border-color: ${actionColor}; color: ${textColor};" 
+                     ondragover="allowDrop(event)" ondrop="handleDrop(event)">
+                  ${dropText}
+                </div>
+                <button id="validate-code" class="action-btn" style="background: ${actionColor}; color: ${cardColor}; margin-top: 20px;" onclick="validateCode()">
+                  Check My Code
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (stage.activityType === 'dialogue') {
+        activityHTML = `
+          <div class="practice-zone" style="border-color: ${actionColor};">
+            <h3 style="font-size: ${baseSize * 1.625}px; font-weight: 700; margin-bottom: 24px;">🎯 Practice: Write a Kind Message</h3>
+            <p style="font-size: ${baseSize * 1.1875}px; margin-bottom: 20px;">What should your sprite say?</p>
+            <div style="margin: 24px 0;">
+              <label for="msg-input" style="font-size: ${baseSize * 1.0625}px; font-weight: 600; display: block; margin-bottom: 10px;">Your Message:</label>
+              <input type="text" id="msg-input" class="text-input" style="border-color: ${actionColor}; color: ${textColor}; font-family: ${fontStack};" 
+                     placeholder="e.g., Hello friend! Let's help each other!">
+            </div>
+            <div style="border: 5px solid ${actionColor}; border-radius: 16px; text-align: center; padding: 48px; background: white;">
+              <div style="font-size: 72px;">🐱</div>
+              <div id="msg-preview" style="margin-top: 20px; font-size: ${baseSize * 1.1875}px; color: ${textColor}; min-height: 36px;"></div>
+            </div>
+            <button class="action-btn" style="background: ${actionColor}; color: ${cardColor}; margin-top: 20px;" onclick="previewMessage()">
+              Preview Message
+            </button>
+            <button id="confirm-msg" class="action-btn" style="background: ${accentColor}; color: ${cardColor}; margin-top: 20px; opacity: 0.5;" onclick="validateMessage()" disabled>
+              Complete Challenge
+            </button>
+          </div>
+        `;
+      } else if (stage.activityType === 'interaction') {
+        activityHTML = `
+          <div class="practice-zone" style="border-color: ${actionColor};">
+            <h3 style="font-size: ${baseSize * 1.625}px; font-weight: 700; margin-bottom: 24px;">🎯 Practice: Ask a Question</h3>
+            <p style="font-size: ${baseSize * 1.1875}px; margin-bottom: 20px;">Create a question about helping others!</p>
+            <div style="margin: 24px 0;">
+              <label for="quest-input" style="font-size: ${baseSize * 1.0625}px; font-weight: 600; display: block; margin-bottom: 10px;">Your Question:</label>
+              <input type="text" id="quest-input" class="text-input" style="border-color: ${actionColor}; color: ${textColor}; font-family: ${fontStack};" 
+                     placeholder="e.g., How can you help protect the environment?">
+            </div>
+            <button class="action-btn" style="background: ${actionColor}; color: ${cardColor};" onclick="testInteraction()">
+              Test Your Question
+            </button>
+            <div id="quest-test" style="margin-top: 24px; min-height: 60px;"></div>
+          </div>
+        `;
+      } else if (stage.activityType === 'message-select') {
+        activityHTML = `
+          <div class="practice-zone" style="border-color: ${actionColor};">
+            <h3 style="font-size: ${baseSize * 1.625}px; font-weight: 700; margin-bottom: 24px;">🎯 Practice: Choose Your Message</h3>
+            <p style="font-size: ${baseSize * 1.1875}px; margin-bottom: 20px;">Select a global citizenship value!</p>
+            <div style="display: grid; gap: 20px; margin: 28px 0;">
+              <button class="code-brick" style="background: ${cardColor}; color: ${textColor}; border: 4px solid ${actionColor}; width: 100%; text-align: left; padding: 24px;" onclick="pickMessage(this, 'cooperation')">
+                <div style="font-size: ${baseSize * 1.375}px; font-weight: 700;">🤝 COOPERATION</div>
+                <div style="font-size: ${baseSize * 1.0625}px; margin-top: 10px;">"When we work together, we can solve big problems!"</div>
+              </button>
+              <button class="code-brick" style="background: ${cardColor}; color: ${textColor}; border: 4px solid ${actionColor}; width: 100%; text-align: left; padding: 24px;" onclick="pickMessage(this, 'respect')">
+                <div style="font-size: ${baseSize * 1.375}px; font-weight: 700;">🌈 RESPECT</div>
+                <div style="font-size: ${baseSize * 1.0625}px; margin-top: 10px;">"Everyone is different, and that makes the world beautiful!"</div>
+              </button>
+              <button class="code-brick" style="background: ${cardColor}; color: ${textColor}; border: 4px solid ${actionColor}; width: 100%; text-align: left; padding: 24px;" onclick="pickMessage(this, 'environment')">
+                <div style="font-size: ${baseSize * 1.375}px; font-weight: 700;">🌱 ENVIRONMENT</div>
+                <div style="font-size: ${baseSize * 1.0625}px; margin-top: 10px;">"We must protect our planet - it's the only home we have!"</div>
+              </button>
+            </div>
+          </div>
+        `;
+      } else if (stage.activityType === 'ending') {
+        activityHTML = `
+          <div class="practice-zone" style="border-color: ${actionColor};">
+            <h3 style="font-size: ${baseSize * 1.625}px; font-weight: 700; margin-bottom: 24px;">🎯 Practice: Write Your Ending</h3>
+            <p style="font-size: ${baseSize * 1.1875}px; margin-bottom: 20px;">Write a positive final message!</p>
+            <div style="margin: 24px 0;">
+              <label for="ending-input" style="font-size: ${baseSize * 1.0625}px; font-weight: 600; display: block; margin-bottom: 10px;">Ending Message:</label>
+              <input type="text" id="ending-input" class="text-input" style="border-color: ${actionColor}; color: ${textColor}; font-family: ${fontStack};" 
+                     placeholder="e.g., Together we can change the world!">
+            </div>
+            <button class="action-btn" style="background: ${actionColor}; color: ${cardColor};" onclick="validateEnding()">
+              Complete Story
+            </button>
+          </div>
+        `;
+      } else if (stage.activityType === 'reflection') {
+        activityHTML = `
+          <div class="practice-zone" style="border-color: ${actionColor};">
+            <h3 style="font-size: ${baseSize * 1.625}px; font-weight: 700; margin-bottom: 24px;">🎯 Practice: Reflect on Your Learning</h3>
+            <div style="margin: 24px 0;">
+              <p style="font-size: ${baseSize * 1.1875}px; font-weight: 700; margin-bottom: 16px;">What did you learn about Scratch?</p>
+              <p style="font-size: ${baseSize * 1.0625}px; color: ${textColor}; line-height: 1.7; margin-bottom: 24px;">
+                Think about sprites, backdrops, events, motion, dialogue, timing...
+              </p>
+              
+              <p style="font-size: ${baseSize * 1.1875}px; font-weight: 700; margin-bottom: 16px;">What did you learn about being a global citizen?</p>
+              <p style="font-size: ${baseSize * 1.0625}px; color: ${textColor}; line-height: 1.7; margin-bottom: 24px;">
+                Think about diversity, cooperation, kindness, protecting Earth...
+              </p>
+              
+              <button class="action-btn" style="background: ${actionColor}; color: ${cardColor};" onclick="finishReflection()">
+                I've Reflected on My Learning
+              </button>
+            </div>
+          </div>
+        `;
+      } else if (stage.activityType === 'celebration') {
+        activityHTML = `
+          <div class="practice-zone" style="border-color: ${actionColor}; text-align: center;">
+            <div style="font-size: 96px; margin: 24px 0;">🎉🎊✨🌟🎈</div>
+            <h3 style="font-size: ${baseSize * 2.25}px; font-weight: 700; margin-bottom: 24px;">YOU DID IT!</h3>
+            <p style="font-size: ${baseSize * 1.375}px; line-height: 1.9; margin: 24px 0;">
+              You completed all the learning stages! You're ready to become a Scratch creator!
+            </p>
+            <div style="margin: 40px 0; padding: 28px; background: rgba(0, 188, 212, 0.2); border-radius: 20px;">
+              <p style="font-size: ${baseSize * 1.625}px; font-weight: 700; margin-bottom: 20px;">🏆 You Are:</p>
+              <div style="font-size: ${baseSize * 1.1875}px; line-height: 2.2;">
+                ✅ A Scratch Learner<br>
+                ✅ A Digital Storyteller<br>
+                ✅ A Young Global Citizen<br>
+                ✅ An Inspiration to Others
+              </div>
+            </div>
+            <button class="action-btn" style="background: ${actionColor}; color: ${cardColor}; font-size: ${baseSize * 1.375}px; padding: 24px 48px;" onclick="finishCelebration()">
+              🌟 Celebrate My Achievement!
+            </button>
+          </div>
+        `;
+      } else if (stage.activityType === 'scratch-link') {
+        activityHTML = `
+          <div class="practice-zone" style="border-color: ${actionColor}; text-align: center;">
+            <div style="font-size: 96px; margin: 24px 0;">🚀✨🎨</div>
+            <h3 style="font-size: ${baseSize * 2.25}px; font-weight: 700; margin-bottom: 24px;">Now Create in Scratch!</h3>
+            <p style="font-size: ${baseSize * 1.375}px; line-height: 1.9; margin: 24px 0;">
+              You've learned the basics! Time to create your global citizenship story in real Scratch.
+            </p>
+            <div style="margin: 40px 0; padding: 28px; background: rgba(255, 87, 34, 0.15); border-radius: 20px; border: 4px solid ${actionColor};">
+              <p style="font-size: ${baseSize * 1.1875}px; font-weight: 700; margin-bottom: 20px;">💡 Remember to include:</p>
+              <div style="font-size: ${baseSize * 1.0625}px; line-height: 2.2; text-align: left; max-width: 550px; margin: 0 auto;">
+                ✓ Two different characters (diversity)<br>
+                ✓ A meaningful backdrop<br>
+                ✓ Movement and dialogue<br>
+                ✓ A message about global citizenship<br>
+                ✓ A positive ending
+              </div>
+            </div>
+            <div style="margin: 40px 0;">
+              <p style="font-size: ${baseSize * 1.1875}px; margin-bottom: 24px; font-weight: 600;">
+                Click below to open Scratch and start creating!
+              </p>
+              <a href="https://scratch.mit.edu/" target="_blank" rel="noopener noreferrer" 
+                 style="display: inline-block; text-decoration: none;">
+                <button class="action-btn" style="background: ${actionColor}; color: ${cardColor}; font-size: ${baseSize * 1.375}px; padding: 24px 48px;">
+                  🎨 Go to Scratch Website →
+                </button>
+              </a>
+            </div>
+            <button class="action-btn" style="background: ${accentColor}; color: ${cardColor}; font-size: ${baseSize * 1.0625}px; padding: 20px 40px; margin-top: 24px;" onclick="finishScratchLink()">
+              ✅ I'm Ready to Create!
+            </button>
+          </div>
+        `;
+      }
+      
+      container.innerHTML = `
+        <div class="fade-in-up">
+          <div class="stage-card" style="background: ${cardColor}; border-color: ${actionColor}; color: ${textColor}; font-family: ${fontStack};">
+            <div class="badge-tag" style="background: ${actionColor}; color: ${cardColor}; font-size: ${baseSize * 0.9375}px;">
+              STAGE ${stage.num} of 13
+            </div>
+            
+            <h2 style="font-size: ${baseSize * 2.5}px; font-weight: 700; margin: 24px 0; color: ${textColor};">
+              ${stage.title}
+            </h2>
+            
+            <div class="mission-banner" style="background: ${accentColor}; color: ${cardColor}; border-color: ${accentColor}; font-size: ${baseSize * 1.375}px; font-family: ${fontStack};">
+              <strong>🎯 Your Mission:</strong> ${stage.task}
+            </div>
+            
+            ${activityHTML}
+            
+            <div style="margin-top: 32px; padding: 24px; background: rgba(0, 188, 212, 0.15); border-radius: 20px; border: 4px solid ${accentColor};">
+              <p style="font-size: ${baseSize * 1.1875}px; font-weight: 700; color: ${textColor}; font-family: ${fontStack};">
+                ${stage.valueMessage}
+              </p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Activity interaction functions
+    function validateQuiz(stageNum, isCorrect) {
+      if (isCorrect) {
+        showNotification('✅ Correct! You understand global citizenship!', 'success');
+        setTimeout(() => markStageComplete(stageNum), 1000);
+      } else {
+        showNotification('❌ Not quite. Try again!', 'error');
+      }
+    }
+
+    function pickSprite(elem, emoji, kind) {
+      if (!stageState.chosenSprites) stageState.chosenSprites = [];
+      
+      if (elem.classList.contains('selected')) {
+        elem.classList.remove('selected');
+        stageState.chosenSprites = stageState.chosenSprites.filter(s => s !== kind);
+      } else {
+        if (stageState.chosenSprites.length < 2) {
+          elem.classList.add('selected');
+          stageState.chosenSprites.push(kind);
+        } else {
+          showNotification('You can only choose 2 sprites!', 'error');
+        }
+      }
+      
+      const btn = document.getElementById('confirm-sprites');
+      if (stageState.chosenSprites.length === 2) {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      } else {
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+      }
+    }
+
+    function validateSprites() {
+      if (stageState.chosenSprites && stageState.chosenSprites.length === 2) {
+        showNotification('✅ Great! You chose 2 different sprites!', 'success');
+        setTimeout(() => markStageComplete(2), 1000);
+      }
+    }
+
+    function pickBackdrop(elem, kind) {
+      document.querySelectorAll('.backdrop-choice').forEach(opt => opt.classList.remove('selected'));
+      elem.classList.add('selected');
+      stageState.chosenBackdrop = kind;
+      
+      const btn = document.getElementById('confirm-backdrop');
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }
+
+    function validateBackdrop() {
+      if (stageState.chosenBackdrop) {
+        showNotification('✅ Perfect backdrop choice!', 'success');
+        setTimeout(() => markStageComplete(3), 1000);
+      }
+    }
+
+    function startDrag(evt) {
+      evt.dataTransfer.setData('text/plain', evt.target.dataset.block);
+      evt.target.style.opacity = '0.5';
+    }
+
+    function allowDrop(evt) {
+      evt.preventDefault();
+      evt.currentTarget.classList.add('drag-over');
+    }
+
+    function handleDrop(evt) {
+      evt.preventDefault();
+      evt.currentTarget.classList.remove('drag-over');
+      
+      const blockKind = evt.dataTransfer.getData('text/plain');
+      const dropZone = evt.currentTarget;
+      
+      if (!stageState.placedBlocks) stageState.placedBlocks = [];
+      stageState.placedBlocks.push(blockKind);
+      
+      const blockColors = {
+        'event': '#FFAB19',
+        'motion': '#4C97FF',
+        'looks': '#9966FF',
+        'wait': '#FFBF00'
+      };
+      
+      const blockLabels = {
+        'event': 'when 🚩 clicked',
+        'motion': 'move 10 steps',
+        'looks': 'say Hello!',
+        'wait': 'wait 2 seconds'
+      };
+      
+      const blockElem = document.createElement('div');
+      blockElem.className = 'code-brick';
+      blockElem.style.background = blockColors[blockKind];
+      blockElem.style.color = 'white';
+      blockElem.style.margin = '6px';
+      blockElem.style.cursor = 'default';
+      blockElem.textContent = blockLabels[blockKind];
+      
+      if (dropZone.children.length === 0) {
+        dropZone.innerHTML = '';
+      }
+      dropZone.appendChild(blockElem);
+    }
+
+    function validateCode() {
+      const stageNum = activeStage;
+      
+      if (stageNum === 4) {
+        if (stageState.placedBlocks && stageState.placedBlocks.includes('event')) {
+          showNotification('✅ Perfect! You added the event block!', 'success');
+          setTimeout(() => markStageComplete(4), 1000);
+        } else {
+          showNotification('❌ You need the green flag event block!', 'error');
+        }
+      } else if (stageNum === 5) {
+        const hasEvent = stageState.placedBlocks && stageState.placedBlocks.includes('event');
+        const hasMotion = stageState.placedBlocks && stageState.placedBlocks.includes('motion');
+        
+        if (hasEvent && hasMotion) {
+          showNotification('✅ Excellent! Event + Motion = Movement!', 'success');
+          setTimeout(() => markStageComplete(5), 1000);
+        } else {
+          showNotification('❌ You need both event and motion blocks!', 'error');
+        }
+      } else if (stageNum === 7) {
+        const hasWait = stageState.placedBlocks && stageState.placedBlocks.includes('wait');
+        
+        if (hasWait) {
+          showNotification('✅ Great timing! You added a wait block!', 'success');
+          setTimeout(() => markStageComplete(7), 1000);
+        } else {
+          showNotification('❌ You need a wait block for timing!', 'error');
+        }
+      }
+    }
+
+    function previewMessage() {
+      const input = document.getElementById('msg-input');
+      const preview = document.getElementById('msg-preview');
+      const btn = document.getElementById('confirm-msg');
+      
+      if (input.value.trim().length > 0) {
+        preview.textContent = `"${input.value}"`;
+        preview.style.padding = '16px 24px';
+        preview.style.background = 'white';
+        preview.style.borderRadius = '20px';
+        preview.style.border = '4px solid ' + (appConfig.action_color || defaultConfig.action_color);
+        preview.style.display = 'inline-block';
+        
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      } else {
+        showNotification('Please write a message first!', 'error');
+      }
+    }
+
+    function validateMessage() {
+      const input = document.getElementById('msg-input');
+      if (input.value.trim().length > 5) {
+        showNotification('✅ Beautiful message! Your sprite can talk!', 'success');
+        setTimeout(() => markStageComplete(6), 1000);
+      }
+    }
+
+    function testInteraction() {
+      const input = document.getElementById('quest-input');
+      const testArea = document.getElementById('quest-test');
+      const baseSize = appConfig.font_size || defaultConfig.font_size;
+      const fontStack = `${appConfig.font_family || defaultConfig.font_family}, Trebuchet MS, sans-serif`;
+      const actionColor = appConfig.action_color || defaultConfig.action_color;
+      const cardColor = appConfig.card_color || defaultConfig.card_color;
+      
+      if (input.value.trim().length > 0) {
+        testArea.innerHTML = `
+          <div style="padding: 24px; background: ${cardColor}; border-radius: 16px; border: 4px solid ${actionColor};">
+            <p style="font-size: ${baseSize * 1.1875}px; font-weight: 700; margin-bottom: 16px; font-family: ${fontStack};">
+              Your sprite asks: "${input.value}"
+            </p>
+            <input type="text" placeholder="User can type answer here..." class="text-input" style="border-color: ${actionColor}; margin-top: 16px;">
+            <button class="action-btn" style="background: ${actionColor}; color: ${cardColor}; margin-top: 16px;" onclick="finishInteraction()">
+              This works! Complete Challenge
+            </button>
+          </div>
+        `;
+      } else {
+        showNotification('Please write a question first!', 'error');
+      }
+    }
+
+    function finishInteraction() {
+      showNotification('✅ Awesome interaction! Great question!', 'success');
+      setTimeout(() => markStageComplete(8), 1000);
+    }
+
+    function pickMessage(elem, msgKind) {
+      showNotification('✅ Powerful message chosen!', 'success');
+      setTimeout(() => markStageComplete(9), 1000);
+    }
+
+    function validateEnding() {
+      const input = document.getElementById('ending-input');
+      if (input.value.trim().length > 5) {
+        showNotification('✅ Perfect ending! Story complete!', 'success');
+        setTimeout(() => markStageComplete(10), 1000);
+      } else {
+        showNotification('Please write an ending message!', 'error');
+      }
+    }
+
+    function finishReflection() {
+      showNotification('✅ Reflection complete! You learned so much!', 'success');
+      setTimeout(() => markStageComplete(11), 1000);
+    }
+
+    function finishCelebration() {
+      showNotification('🎉 CONGRATULATIONS! Almost there!', 'success');
+      setTimeout(() => {
+        markStageComplete(12);
+        setTimeout(() => navigateNext(), 1500);
+      }, 1000);
+    }
+
+    function finishScratchLink() {
+      showNotification('🚀 Amazing! Ready for Scratch!', 'success');
+      setTimeout(() => {
+        markStageComplete(13);
+        setTimeout(() => returnToGrid(), 2000);
+      }, 1000);
+    }
+
+    function showNotification(msg, kind) {
+      const existing = document.querySelector('.notification-toast');
+      if (existing) existing.remove();
+      
+      const toast = document.createElement('div');
+      toast.className = 'notification-toast';
+      toast.textContent = msg;
+      
+      const bgColor = kind === 'success' 
+        ? (appConfig.accent_color || defaultConfig.accent_color)
+        : (appConfig.action_color || defaultConfig.action_color);
+      const textColor = appConfig.bg_color || defaultConfig.bg_color;
+      
+      toast.style.background = bgColor;
+      toast.style.color = textColor;
+      
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    async function updateUI(newConfig) {
+      appConfig = { ...newConfig };
+      
+      const baseSize = appConfig.font_size || defaultConfig.font_size;
+      const customFont = appConfig.font_family || defaultConfig.font_family;
+      const fallbackFonts = 'Trebuchet MS, sans-serif';
+      const fontStack = `${customFont}, ${fallbackFonts}`;
+      
+      document.body.style.background = appConfig.bg_color || defaultConfig.bg_color;
+      document.body.style.fontFamily = fontStack;
+      
+      const header = document.getElementById('header-section');
+      header.style.background = appConfig.card_color || defaultConfig.card_color;
+      header.style.borderBottom = `6px solid ${appConfig.action_color || defaultConfig.action_color}`;
+      
+      const title = document.getElementById('main-title');
+      title.textContent = appConfig.site_title || defaultConfig.site_title;
+      title.style.fontSize = `${baseSize * 2.75}px`;
+      title.style.color = appConfig.text_color || defaultConfig.text_color;
+      title.style.fontFamily = fontStack;
+      
+      const subtitle = document.getElementById('main-subtitle');
+      subtitle.textContent = appConfig.welcome_message || defaultConfig.welcome_message;
+      subtitle.style.fontSize = `${baseSize * 1.375}px`;
+      subtitle.style.color = appConfig.text_color || defaultConfig.text_color;
+      subtitle.style.fontFamily = fontStack;
+      
+      const teacherLabel = document.getElementById('teacher-label');
+      teacherLabel.textContent = appConfig.teacher_name || defaultConfig.teacher_name;
+      teacherLabel.style.fontSize = `${baseSize * 1.1875}px`;
+      teacherLabel.style.color = appConfig.text_color || defaultConfig.text_color;
+      teacherLabel.style.fontFamily = fontStack;
+      
+      const progressBG = document.getElementById('progress-bg');
+      progressBG.style.background = appConfig.card_color || defaultConfig.card_color;
+      
+      const progressBar = document.getElementById('progress-fill');
+      progressBar.style.color = appConfig.action_color || defaultConfig.action_color;
+      
+      const progressLabel = document.getElementById('progress-label');
+      progressLabel.style.color = appConfig.text_color || defaultConfig.text_color;
+      progressLabel.style.fontSize = `${baseSize * 1.1875}px`;
+      progressLabel.style.fontFamily = fontStack;
+      
+      const buttons = document.querySelectorAll('.action-btn');
+      buttons.forEach(btn => {
+        if (!btn.disabled) {
+          btn.style.background = appConfig.action_color || defaultConfig.action_color;
+          btn.style.color = appConfig.bg_color || defaultConfig.bg_color;
+        }
+        btn.style.fontFamily = fontStack;
+        btn.style.fontSize = `${baseSize * 1.1875}px`;
+      });
+      
+      if (activeStage === 0) {
+        displayStageGrid();
+      } else {
+        displayStageContent(activeStage);
+        updateNavButtons();
+      }
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: updateUI,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.bg_color || defaultConfig.bg_color,
+              set: (value) => {
+                config.bg_color = value;
+                window.elementSdk.setConfig({ bg_color: value });
+              }
+            },
+            {
+              get: () => config.card_color || defaultConfig.card_color,
+              set: (value) => {
+                config.card_color = value;
+                window.elementSdk.setConfig({ card_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.action_color || defaultConfig.action_color,
+              set: (value) => {
+                config.action_color = value;
+                window.elementSdk.setConfig({ action_color: value });
+              }
+            },
+            {
+              get: () => config.accent_color || defaultConfig.accent_color,
+              set: (value) => {
+                config.accent_color = value;
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['site_title', config.site_title || defaultConfig.site_title],
+          ['welcome_message', config.welcome_message || defaultConfig.welcome_message],
+          ['teacher_name', config.teacher_name || defaultConfig.teacher_name]
+        ])
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await startApp();
+      updateUI(defaultConfig);
+      displayStageGrid();
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9baa6b056362a85e',t:'MTc2Nzg2MTkxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
